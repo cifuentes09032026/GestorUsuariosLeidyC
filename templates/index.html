@@ -31,8 +31,31 @@
             </div>
            <!-- llamar al modal-->
             {% include 'registrarusu.html' %}
+            <table class="table table-bordered mt-3">
 
+                <thead class="table-dark">
+                    <tr>
+                        <td>Codigo</td>
+                        <td>Usuario</td>
+                        <td>Contraseña</td>
+                        <td>Rol</td>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                        {% for u in user %}
+                        <tr>
+                          <td>{{ u[0]}}</td>
+                          <td>{{ u[1]}}</td>
+                          <td>{{ u[2]}}</td>
+                          <td>{{ u[3]}}</td>
+                        </tr>
+                        {% endfor %}
+
+                </tbody>
+            </table>
         </div>
-    
+
     </body>
 </html>

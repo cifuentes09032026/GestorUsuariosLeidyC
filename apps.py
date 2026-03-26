@@ -58,8 +58,16 @@ def inicio():
       if 'usuario'  not in session:
             return redirect(url_for('login'))
 
-      else:
-           return render_template('index.html')
+      con = conectar()
+      cursor = con.cursor()
+
+      sql = "SELECT  * FROM usuarios"
+      cursor.execute(sql)
+
+      lista = cursor.fetchall()
+
+      
+      return render_template('index.html', user=lista)
 #cerrar la sesion
 @apps.route('/salir')
 def  salir():
