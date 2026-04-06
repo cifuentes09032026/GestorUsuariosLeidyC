@@ -107,6 +107,36 @@ def eliminarusu(id):
 
      return redirect(url_for("inicio"))
 
+@apps.route('/guardar_usuario', methods=['POST'])
+def guardar_usuario():
 
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+
+    usuario = request.form['txtusuario']
+    password = request.form['txtcontrasena']
+    rol = request.form['txtrol']
+    documento = request.form['txtdocumento']
+
+    con = conectar()
+    cursor = con.cursor()
+
+    # VALIDAR SI YA EXISTE
+    sql_validar = "SELECT * FROM usuarios WHERE usuario=%s"
+    cursor.execute(sql_validar, (usuario,))
+    existe = cursor.fetchone()
+
+    if existe:
+        print("El usuario ya existe")
+    else:
+        sql = "INSERT INTO usuarios (usuario, password, rol, documento) VALUES (%s,%s,%s,%s)"
+        cursor.execute(sql, (usuario, password, rol, documento))
+        con.commit()
+        print("Usuario registrado correctamente")
+
+    cursor.close()
+    con.close()
+
+    return redirect(url_for('inicio'))
 if __name__ == '__main__':
     apps.run(debug=True)
