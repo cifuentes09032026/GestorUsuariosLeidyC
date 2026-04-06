@@ -54,7 +54,7 @@ def login_form():
 #validar sesion en la pagina inicial
 @apps.route('/inicio')
 def inicio():
- 
+
       if 'usuario'  not in session:
             return redirect(url_for('login'))
 
@@ -66,13 +66,46 @@ def inicio():
 
       lista = cursor.fetchall()
 
-      
+
       return render_template('index.html', user=lista)
 #cerrar la sesion
 @apps.route('/salir')
 def  salir():
       session.clear()
       return redirect(url_for('login'))
+
+#crearuna rato para eliminar los usuarios tipo empleado
+@apps.route('/eliminar/<int:id>')
+def eliminarusu(id):
+     if 'usuario'  not in session:
+            return redirect(url_for('login'))
+
+     con = conectar()
+     cursor = con.cursor()
+
+     #buscar el usuario
+
+     sql = "SELECT rol FROM usuarios WHERE id_usuario=%s"
+     cursor.execute(sql, (id,))
+
+     usuario = cursor.fetchone()
+
+     #validar el rol del usuario
+     if usuario:
+           rol = usuario[0]
+
+           if rol == "administrador":
+                 flash("No se puede eliminar el administrador")
+
+           else:
+                 cursor.execute("DELETE FROM usuarios WHERE id_usuario=%s", (id,))
+                 con.commit()
+                 flash("Empleado eliminado")
+
+     cursor.close()
+     con.close()
+
+     return redirect(url_for("inicio"))
 
 
 if __name__ == '__main__':
