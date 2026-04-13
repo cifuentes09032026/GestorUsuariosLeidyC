@@ -138,5 +138,48 @@ def guardar_usuario():
     con.close()
 
     return redirect(url_for('inicio'))
+
+#Editar usuarios
+@apps.route('/editarusu/<int:id>')
+def editarusu(id):
+
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+    
+    con = conectar()
+    cursor = con.cursor()
+
+    sql1 = "SELECT * FROM usuarios WHERE id_usuario=%s"
+    cursor.execute(sql1,(id,))
+    usuario = cursor.fetchone()
+
+    cursor.close()
+    con.close()
+
+    return render_template("editarusuario.html",usu= usuario)
+
+#actualizar datos del formulario
+@apps.route('/actualizar',methods=['POST'])
+def actualizar_usuarios():
+
+     id = request.form['id']
+     usuario = request.form['txtusuario']
+     password = request.form['txtpassword']
+
+     con = conectar()
+     cursor = con.cursor()
+
+     sqla = "UPDATE usuarios SET usuario=%s,password=%s WHERE id_usuario=%s"
+
+     cursor.execute(sqla,(usuario,password,id))
+     con.commit()
+
+     cursor.close()
+     con.close()
+
+     print("usuario actualizado")
+     
+     return  redirect(url_for('inicio'))
+
 if __name__ == '__main__':
     apps.run(debug=True)

@@ -52,7 +52,7 @@
                           <td>{{ u[2]}}</td>
                           <td>{{ u[3]}}</td>
                            <td>
-                           <a href=""class="btn btn-warning btn-sm">Editar</a>
+                           <a href="{{ url_for('editarusu', id=u[0]) }}"class="btn btn-warning btn-sm">Editar</a>
 
                            <a href="{{ url_for('eliminarusu', id=u[0]) }}"class="btn btn-danger btn-sm"
                            onclick="return confirm('¿Seguro que desea eliminar el usuario?')">Eliminar </a>
